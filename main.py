@@ -35,3 +35,12 @@ def create_task(task: Task):
     new_task = {"id": new_id, "title": task.title, "completed": task.completed}
     tasks.append(new_task)
     return new_task
+
+#endporint para obtener una tarea especifica
+
+@app.get("/tasks/{task_id}")
+def get_task(task_id: int):
+    for task in tasks:
+        if task["id"] == task_id:
+            return task
+    raise HTTPException(status_code=404, detail="Task not found")
