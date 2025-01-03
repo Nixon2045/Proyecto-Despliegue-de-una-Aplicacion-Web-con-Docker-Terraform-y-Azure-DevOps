@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantyc import BaseModel
+from pydantic import BaseModel
 
 # Crear instancias de la app
 
@@ -31,7 +31,7 @@ def get_tasks():
 @app.post("/tasks")
 def create_task(task: Task):
     # Generar nuevi ID considerando las tareas anteriores
-    new_id = max(task["id"] for task in tasks) +1 else 1
+    new_id = max(task["id"] for task in tasks) + 1 if tasks else 1
     new_task = {"id": new_id, "title": task.title, "completed": task.completed}
     tasks.append(new_task)
     return new_task
