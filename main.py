@@ -57,3 +57,13 @@ def update_task(task_id: int,updated_task: Task):
             return task
     raise HTTPException(status_code=404, detail="task not found")
 
+#endpoint para eliminar tareas 
+
+@app.delete("/tasks/{task_id}")
+def delete_task(task_id: int,):
+    for task in tasks:
+        if task["id"] == task_id:
+            tasks.remove(task)
+            return {"message": f"Task with ID {task_id} has been eliminated"}
+    raise HTTPException(status_code=404, detail="task no found")
+
