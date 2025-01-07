@@ -1,9 +1,16 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Path
+from pydantic import BaseModel,Field
 
 # Crear instancias de la app
 
 app = FastAPI()
+
+# modelo de datos de todas las task 
+
+class Task(BaseModel):
+    title : str = Field(..., min_length=3, max_length=100, description="Titulo de la tarea ")
+    completed: bool = Field(False, description="Estado de la tarea")
+
 
 # Datos de ejemplo ( base de datos momentanea )
 
@@ -13,12 +20,6 @@ tasks = [
     {"id": 3, "title": "preguntar por las repisas", "completed": False},
     {"id": 4, "title": "avisar para el paquete en la casa de mis padres", "completed": False},
 ]
-
-# modelo de datos de todas las task 
-
-class Task(BaseModel):
-    title : str
-    completed: bool = False
 
 # endpoint para obtener todas las tareas
 
@@ -39,7 +40,7 @@ def create_task(task: Task):
 #endporint para obtener una tarea especifica
 
 @app.get("/tasks/{task_id}")
-def get_task(task_id: int):
+def get_task(task_id: int = Path(..., ge=1, description="ID de la tarea (debe ser un entero positivo)")):
     for task in tasks:
         if task["id"] == task_id:
             return task
