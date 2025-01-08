@@ -1,9 +1,17 @@
 from fastapi import FastAPI, HTTPException, Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel,Field
+from fastapi.responses import JSONResponse
 
 # Crear instancias de la app
 
 app = FastAPI()
+
+# modelo de datos de todas las task 
+
+class Task(BaseModel):
+    title : str = Field(..., min_length=3, max_length=100, description="Titulo de la tarea ")
+    completed: bool = Field(False, description="Estado de la tarea")
+
 
 # Datos de ejemplo ( base de datos momentanea )
 
@@ -13,12 +21,6 @@ tasks = [
     {"id": 3, "title": "preguntar por las repisas", "completed": False},
     {"id": 4, "title": "avisar para el paquete en la casa de mis padres", "completed": False},
 ]
-
-# modelo de datos de todas las task 
-
-class Task(BaseModel):
-    title : str
-    completed: bool = False
 
 # endpoint para obtener todas las tareas
 
@@ -39,7 +41,7 @@ def create_task(task: Task):
 #endporint para obtener una tarea especifica
 
 @app.get("/tasks/{task_id}")
-def get_task(task_id: int):
+def get_task(task_id: int = Path(..., ge=1, description="ID de la tarea (debe ser un entero positivo)")):
     for task in tasks:
         if task["id"] == task_id:
             return task
@@ -67,16 +69,14 @@ def delete_task(task_id: int,):
             return {"message": f"Task with ID {task_id} has been eliminated"}
     raise HTTPException(status_code=404, detail="task no found")
 
-# centralizacion de errores 
-
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc: HTTPException):
     return JSONResponse(
         status_code=exc.status_code,
         content={
-            "error" : {
+            "error": {
                 "code": exc.status_code,
                 "message": exc.detail
             }
-        }
+        },
     )
