@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Path
-from pydantic import BaseModel,Field
+from pydantic import BaseModel, Field
 from fastapi.responses import JSONResponse
 
 # Crear instancias de la app
@@ -69,8 +69,11 @@ def delete_task(task_id: int,):
             return {"message": f"Task with ID {task_id} has been eliminated"}
     raise HTTPException(status_code=404, detail="task no found")
 
+#manejo de errores 
+
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc: HTTPException):
+    print(f"Error handler caller:{exc.status_code} - {exc.detail}") #debug
     return JSONResponse(
         status_code=exc.status_code,
         content={
