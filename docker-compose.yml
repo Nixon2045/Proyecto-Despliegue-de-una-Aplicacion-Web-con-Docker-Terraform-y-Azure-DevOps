@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     ports: 
     - "8080:8080"
-    container_name: todo-list-container
+    container_name: todo-list-container2
     #environment:
       # si hubiera necesidad de variables del entorno 
       # como ejemplo "APY_KEY=passw123"
