@@ -2,47 +2,50 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = ">3.0"
+      version = "4.15.0"
     }
   }
 
 
 backend "azurerm" {
   resource_group_name   = "tf_backend_rg"
-  storage_account_name  = "tfstateaccount"
+  storage_account_name  = "tfstateaccount1736995580"
   container_name        = "tfstate"
   key                   = "terraform.tfstate"
- 
   }
 }
 
 provider "azurerm" {
     features {}
+    subscription_id =  "78ce0709-8050-4077-96ce-0ca5dd9bda30" 
 }
 
-resource "azurerm_group_name" "exampleforAPI" {
+resource "azurerm_resource_group" "exampleforAPI" {
     name    =   "todo-api-rg"
-    location=   "East US"
+    location=   "westeurope"
 }
 
-resource "azurerm_app_service_plan" "exampleforappservice" {
+resource "azurerm_service_plan" "exampleforappservice" {
     name                =   "todo-api-service-plan"
-    location            =   "azurerm_group_name.exampleforAPI.location"
-    resource_gruop_name =   "azurerm_resource_group.example for API.name"
-    sku {
-        tier = "Basic"
-        size = "B1"
+    location            =   azurerm_resource_group.exampleforAPI.location
+    resource_group_name =   azurerm_resource_group.exampleforAPI.name
+    sku_name            =   "B1"
+    os_type             =   "Linux" 
+}
+
+
+resource "azurerm_linux_web_app" "appservice" {
+    name                =   "todo-api-service-plan"
+    location            =   azurerm_resource_group.exampleforAPI.location
+    resource_group_name =   azurerm_resource_group.exampleforAPI.name
+    service_plan_id     =   azurerm_service_plan.exampleforappservice.id
+
+    app_settings = {
+    "WEBSITES_ENABLE_APP_SERVICE_STORAGE"  = "false"
+    "DOCKER_CUSTOM_IMAGE_NAME"             = "nox2045/todo-list-api"
     }
-}
-
-resource "azurerm_app_service" "appservice" {
-    name                =   "todo-api-service-plan"
-    location            =   "azurerm_group_name.example for api.location"
-    resource_gruop_name =   "azurerm_resource_group.example for API.name"
-    app_service_plan_id =   "azurerm_app_service_plan.example for app service.id"
 
     site_config {
         always_on = true 
-        linux_fx_version = "DOCKER|nox2045/todo-list-api"
     }
 }
