@@ -17,7 +17,11 @@ backend "azurerm" {
 
 provider "azurerm" {
     features {}
+<<<<<<< HEAD
     subscription_id = "78ce0709-8050-4077-96ce-0ca5dd9bda30"
+=======
+    subscription_id =  "78ce0709-8050-4077-96ce-0ca5dd9bda30" 
+>>>>>>> 10edfb24708721c6b5c22135afa4758b39a83cfb
 }
 
 resource "azurerm_resource_group" "exampleforAPI" {
@@ -29,6 +33,7 @@ resource "azurerm_service_plan" "exampleforappservice" {
     name                =   "todo-api-service-plan"
     location            =   azurerm_resource_group.exampleforAPI.location
     resource_group_name =   azurerm_resource_group.exampleforAPI.name
+<<<<<<< HEAD
     os_type             =   "Linux"
     sku_name            =   "B1"
     
@@ -39,12 +44,33 @@ resource "azurerm_linux_web_app" "appservice" {
     location            =   azurerm_resource_group.exampleforAPI.location
     resource_group_name =   azurerm_resource_group.exampleforAPI.name
     service_plan_id     =   azurerm_service_plan.exampleforappservice.id
+=======
+    sku_name            =   "B1"
+    os_type             =   "Linux" 
+}
+
+
+resource "azurerm_linux_web_app" "appservice" {
+    name                =   "todo-api-service-plan"
+    location            =   azurerm_resource_group.exampleforAPI.location
+    resource_group_name =   azurerm_resource_group.exampleforAPI.name
+    service_plan_id     =   azurerm_service_plan.exampleforappservice.id
+
+    app_settings = {
+    "WEBSITES_ENABLE_APP_SERVICE_STORAGE"  = "false"
+    "DOCKER_CUSTOM_IMAGE_NAME"             = "nox2045/todo-list-api"
+    }
+>>>>>>> 10edfb24708721c6b5c22135afa4758b39a83cfb
 
     app_settings = {
        "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
         "DOCKER_CUSTOM_IMAGE_NAME"           = "nox2045/todo-list-api:latest"
   }
     site_config {
+<<<<<<< HEAD
         always_on         = true 
+=======
+        always_on = true 
+>>>>>>> 10edfb24708721c6b5c22135afa4758b39a83cfb
     }
 }
