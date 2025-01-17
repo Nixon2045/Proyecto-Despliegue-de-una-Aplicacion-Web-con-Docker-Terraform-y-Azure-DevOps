@@ -42,7 +42,7 @@ resource "azurerm_linux_web_app" "appservice" {
 
     app_settings = {
        "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-        "DOCKER_CUSTOM_IMAGE_NAME"           = "nox2045/todo-list-api"
+        "DOCKER_CUSTOM_IMAGE_NAME"           = "nox2045/todo-list-api:latest"
   }
     site_config {
         always_on         = true 
