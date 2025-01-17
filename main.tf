@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = ">3.0"
+      version = "4.15.0"
     }
   }
 
@@ -12,7 +12,6 @@ backend "azurerm" {
   storage_account_name  = "tfstateaccount1736995580"
   container_name        = "tfstate"
   key                   = "terraform.tfstate"
- 
   }
 }
 
@@ -23,7 +22,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "exampleforAPI" {
     name    =   "todo-api-rg"
-    location=   "East US"
+    location=   "westeurope"
 }
 
 resource "azurerm_service_plan" "exampleforappservice" {

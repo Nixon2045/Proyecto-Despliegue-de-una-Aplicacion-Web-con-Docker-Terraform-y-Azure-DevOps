@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+#archivos que contiene info que no debe ser subida al repo o versionada y binarios
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.tfstate
+.terraform.tfstate.backup
+
+>>>>>>> 10edfb24708721c6b5c22135afa4758b39a83cfb
 # Ignore the .terraform directory
 .terraform/
 
@@ -16,4 +26,8 @@ override.tf.json
 
 # Ignore CLI configuration files
 .terraformrc
+<<<<<<< HEAD
 terraform.rc
+=======
+terraform.rc
+>>>>>>> 10edfb24708721c6b5c22135afa4758b39a83cfb
