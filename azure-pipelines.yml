@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main  # Se ejecuta al hacer push a la rama main
+
+pool:
+  vmImage: 'ubuntu-latest'  # Se ejecuta en una máquina virtual Ubuntu
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'  # Especifica la versión de Python
+
+- script: |
+    python -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt  # Instala las dependencias
+  displayName: 'Set up virtual environment and install dependencies'
+
+- script: |
+    pytest  # Ejecuta las pruebas
+  displayName: 'Run tests'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    artifactName: 'drop-prueba'
+    publishLocation: 'Container'
