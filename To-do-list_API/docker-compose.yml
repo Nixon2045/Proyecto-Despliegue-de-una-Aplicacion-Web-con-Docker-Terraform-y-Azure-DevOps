@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  todo-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+    - "8080:8080"
+    container_name: todo-list-container2
+    #environment:
+      # si hubiera necesidad de variables del entorno 
+      # como ejemplo "APY_KEY=passw123"
+    restart: unless-stopped
