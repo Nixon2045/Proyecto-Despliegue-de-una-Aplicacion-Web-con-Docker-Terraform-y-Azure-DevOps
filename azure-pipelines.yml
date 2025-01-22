@@ -4,27 +4,51 @@
 # https://aka.ms/yaml
 
 trigger:
-- main  # Se ejecuta al hacer push a la rama main
+- main
 
-pool:
-  vmImage: 'ubuntu-latest'  # Se ejecuta en una máquina virtual Ubuntu
+pool: 
+  name: 'Default'# Asegurarse de usar el nombre del pool que se configuro en azure devops.
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'  # Especifica la versión de Python
+jobs:
+- job: BuildOnLinux
+  displayName: 'Build on Linux'
+  pool:
+    name: 'Default'
+    demands:
+      - os -equals linux
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+    displayName: 'Setup Python 3.x on Linux'
+    
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: 'Install dependencies'
 
-- script: |
-    python -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt  # Instala las dependencias
-  displayName: 'Set up virtual environment and install dependencies'
+  - script: |
+      python -m unittest
+    displayName: 'Run tests on Linux'
 
-- script: |
-    pytest  # Ejecuta las pruebas
-  displayName: 'Run tests'
+- job: BuildOnWindows
+  displayName: 'Build on Windows'
+  pool:
+    name: 'Default'
+    demands:
+      - os -equals windows
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+    displayName: 'Setup Python 3.x on Windows'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    artifactName: 'drop-prueba'
-    publishLocation: 'Container'
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: 'Install dependencies'
+
+  - script: |
+      python -m unittest
+    displayName: 'Run tests on Windows'
+
