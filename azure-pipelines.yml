@@ -7,13 +7,13 @@ trigger:
 - main
 
 pool: 
-  name: 'Default'# Asegurarse de usar el nombre del pool que se configuro en azure devops.
+  name: Default # Asegurarse de usar el nombre del pool que se configuro en azure devops.
 
 jobs:
 - job: BuildOnLinux
   displayName: 'Build on Linux'
   pool:
-    name: 'Default'
+    name: Default
     demands:
       - os -equals linux
   steps:
@@ -34,7 +34,7 @@ jobs:
 - job: BuildOnWindows
   displayName: 'Build on Windows'
   pool:
-    name: 'Default'
+    name: Default
     demands:
       - os -equals windows
   steps:
