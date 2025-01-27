@@ -28,6 +28,13 @@ jobs:
     displayName: 'Install dependencies'
 
   - task: CmdLine@2
+  inputs:
+    script: |
+      set PATH=C:\Python311;%PATH%
+      python -m unittest
+
+
+  - task: CmdLine@2
     inputs:
       script: |
         echo "Running Python tests"
@@ -54,6 +61,13 @@ jobs:
       python -m pip install --upgrade pip
       pip install -r requerimientos.txt
     displayName: 'Install dependencies'
+
+  - task: CmdLine@2
+    inputs:
+      script: |
+        set PATH=C:\Python39;%PATH%
+        python -m unittest
+  
 
   - task: CmdLine@2
     inputs:
