@@ -27,9 +27,13 @@ jobs:
       pip install -r requerimientos.txt
     displayName: 'Install dependencies'
 
-  - script: |
-      python -m unittest
-    displayName: 'Run tests on Linux'
+  - task: CmdLine@2
+    inputs:
+      script: |
+        echo "Running Python tests"
+        python --version
+        python -m unittest
+  
 
 - job: BuildOnWindows
   displayName: 'Build on Windows'
@@ -40,29 +44,22 @@ jobs:
   steps:
   - task: UsePythonVersion@0
     inputs:
-<<<<<<< HEAD
-      versionSpec: '3.x'
-      addToPath: true
-      architecture: 'x64'
-    condicion: and(succeded(), eq(variables['Agent.OS'], 'windows'))
-=======
       versionSpec: '3.11'
       addToPath: true
       architecture: 'x64'
     condition: and(succeeded(), eq(variables['Agent.OS'], 'windows'))
->>>>>>> d0fe495a71658a4ca9594a4bdefc9b37c247d022
     displayName: 'Setup Python 3.x on Windows'
 
   - script: |
       python -m pip install --upgrade pip
-<<<<<<< HEAD
-      pip install -r requirimentos.txt
-=======
       pip install -r requerimientos.txt
->>>>>>> d0fe495a71658a4ca9594a4bdefc9b37c247d022
     displayName: 'Install dependencies'
 
-  - script: |
-      python -m unittest
-    displayName: 'Run tests on Windows'
+  - task: CmdLine@2
+    inputs:
+      script: |
+        echo "Running Python tests"
+        python --version
+        python -m unittest
+  
 
