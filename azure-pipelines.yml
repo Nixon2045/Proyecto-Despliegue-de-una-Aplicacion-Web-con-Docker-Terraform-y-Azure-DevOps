@@ -41,11 +41,14 @@ jobs:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.x'
+      addToPath: true
+      architecture: 'x64'
+    condicion: and(succeded(), eq(variables['Agent.OS'], 'windows'))
     displayName: 'Setup Python 3.x on Windows'
 
   - script: |
       python -m pip install --upgrade pip
-      pip install -r requirements.txt
+      pip install -r requirimentos.txt
     displayName: 'Install dependencies'
 
   - script: |
