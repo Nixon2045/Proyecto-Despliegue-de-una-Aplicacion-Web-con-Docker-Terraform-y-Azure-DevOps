@@ -35,14 +35,10 @@ jobs:
     demands:
       - os -equals windows
   steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.12'
-      addToPath: true
-      architecture: 'x64'
-    displayName: 'Setup Python 3.12 on Windows'
-
   - script: |
+      echo "configurando python 3.12"
+      set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python312;%PATH%
+      python --version 
       python -m pip install --upgrade pip
       pip install -r requerimientos.txt
       python -m unittest
