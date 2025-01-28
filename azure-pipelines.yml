@@ -28,7 +28,7 @@ jobs:
     displayName: 'Install dependencies'
 
   - task: CmdLine@2
-  inputs:
+    inputs:
     script: |
       set PATH=C:\Python311;%PATH%
       python -m unittest
