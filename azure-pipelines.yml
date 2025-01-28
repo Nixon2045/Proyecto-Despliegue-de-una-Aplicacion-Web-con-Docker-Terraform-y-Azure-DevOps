@@ -25,21 +25,8 @@ jobs:
   - script: |
       python -m pip install --upgrade pip
       pip install -r requerimientos.txt
-    displayName: 'Install dependencies'
-
-  - task: CmdLine@2
-    inputs:
-    script: |
-      set PATH=C:\Python311;%PATH%
       python -m unittest
-
-  - task: CmdLine@2
-    inputs:
-      script: |
-        echo "Running Python tests"
-        python --version
-        python -m unittest
-  
+    displayName: 'Instalacion dependencias y run test'  
 
 - job: BuildOnWindows
   displayName: 'Build on Windows'
@@ -53,26 +40,12 @@ jobs:
       versionSpec: '3.11'
       addToPath: true
       architecture: 'x64'
-    condition: and(succeeded(), eq(variables['Agent.OS'], 'windows'))
     displayName: 'Setup Python 3.x on Windows'
 
   - script: |
       python -m pip install --upgrade pip
       pip install -r requerimientos.txt
-    displayName: 'Install dependencies'
-
-  - task: CmdLine@2
-    inputs:
-      script: |
-        set PATH=C:\Python39;%PATH%
-        python -m unittest
-  
-
-  - task: CmdLine@2
-    inputs:
-      script: |
-        echo "Running Python tests"
-        python --version
-        python -m unittest
+      python -m unittest
+    displayName: 'Instalacion dependencias y run tests'
   
 
