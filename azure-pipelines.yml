@@ -16,17 +16,15 @@ jobs:
     name: Default
     demands:
       - os -equals linux
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.11'
-    displayName: 'Setup Python 3.x on Linux'
-    
+  steps:    
   - script: |
+      echo "configurando python 3.12"
+      set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python312;%PATH%
+      python --version 
       python -m pip install --upgrade pip
       pip install -r requerimientos.txt
       python -m unittest
-    displayName: 'Instalacion dependencias y run test'  
+    displayName: 'Instalacion dependencias y run tests'  
 
 - job: BuildOnWindows
   displayName: 'Build on Windows'
