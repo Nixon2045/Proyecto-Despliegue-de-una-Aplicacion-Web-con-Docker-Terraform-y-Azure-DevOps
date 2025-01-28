@@ -33,8 +33,7 @@ jobs:
       set PATH=C:\Python311;%PATH%
       python -m unittest
 
-
-  - task: CmdLine@3
+  - task: CmdLine@2
     inputs:
       script: |
         echo "Running Python tests"
@@ -69,7 +68,7 @@ jobs:
         python -m unittest
   
 
-  - task: CmdLine@3
+  - task: CmdLine@2
     inputs:
       script: |
         echo "Running Python tests"
