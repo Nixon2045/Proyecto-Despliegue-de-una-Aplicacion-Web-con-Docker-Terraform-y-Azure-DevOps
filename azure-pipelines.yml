@@ -37,10 +37,10 @@ jobs:
   steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.11'
+      versionSpec: '3.12'
       addToPath: true
       architecture: 'x64'
-    displayName: 'Setup Python 3.x on Windows'
+    displayName: 'Setup Python 3.12 on Windows'
 
   - script: |
       python -m pip install --upgrade pip
