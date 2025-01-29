@@ -18,6 +18,8 @@ jobs:
       - os -equals linux
   steps:    
   - script: |
+      python3 -m venv venv1
+      source venv/bin/activate
       echo "configurando python3"
       set PATH=\usr\bin\Python3;%PATH%
       python3 --version 
