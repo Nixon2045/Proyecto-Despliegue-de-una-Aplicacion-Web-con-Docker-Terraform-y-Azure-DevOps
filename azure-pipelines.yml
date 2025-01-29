@@ -4,42 +4,29 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+- main  # Se ejecuta al hacer push a la rama main
 
-pool: 
-  name: Default # Asegurarse de usar el nombre del pool que se configuro en azure devops.
+pool:
+  vmImage: 'ubuntu-latest'  # Se ejecuta en una máquina virtual Ubuntu
 
-jobs:
-- job: BuildOnLinux
-  displayName: 'Build on Linux'
-  pool:
-    name: Default
-    demands:
-      - os -equals linux
-  steps:    
-  - script: |
-      echo "configurando python 3.12"
-      set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python312;%PATH%
-      python --version 
-      python -m pip install --upgrade pip
-      pip install -r requerimientos.txt
-      
-    displayName: 'Instalacion dependencias y run tests'  
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'  # Especifica la versión de Python
 
-- job: BuildOnWindows
-  displayName: 'Build on Windows'
-  pool:
-    name: Default
-    demands:
-      - os -equals windows
-  steps:
-  - script: |
-      echo "configurando python 3.12"
-      set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python312;%PATH%
-      python --version 
-      python -m pip install --upgrade pip
-      pip install -r requerimientos.txt
-      
-    displayName: 'Instalacion dependencias y run tests'
-  
+- script: |
+    python -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt  # Instala las dependencias
+  displayName: 'Set up virtual environment and install dependencies'
+
+- script: |
+    pytest  # Ejecuta las pruebas
+  displayName: 'Run tests'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    artifactName: 'drop'
+    publishLocation: 'Container'
+
 
