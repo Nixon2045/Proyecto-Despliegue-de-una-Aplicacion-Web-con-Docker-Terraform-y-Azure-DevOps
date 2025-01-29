@@ -18,8 +18,8 @@ jobs:
       - os -equals linux
   steps:    
   - script: |
-      echo "configurando python 3.12"
-      set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python312;%PATH%
+      echo "configurando python3"
+      set PATH=\usr\bin\Python3;%PATH%
       python --version 
       python -m pip install --upgrade pip
       pip install -r requerimientos.txt
