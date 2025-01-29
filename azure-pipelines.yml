@@ -20,9 +20,9 @@ jobs:
   - script: |
       echo "configurando python3"
       set PATH=\usr\bin\Python3;%PATH%
-      python --version 
-      python -m pip install --upgrade pip
-      pip install -r requerimientos.txt
+      python3 --version 
+      python3 -m pip3 install --upgrade pip3
+      pip3 install -r requerimientos.txt
       
     displayName: 'Instalacion dependencias y run tests'  
 
