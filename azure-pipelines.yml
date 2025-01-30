@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- main  # Se ejecuta al hacer push a la rama main
+- test  # Se ejecuta al hacer push a la rama main
 
 pool:
   vmImage: 'ubuntu-latest'  # Se ejecuta en una máquina virtual Ubuntu
@@ -12,7 +12,7 @@ pool:
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.x'  # Especifica la versión de Python
+    versionSpec: '3.12'  # Especifica la versión de Python
 
 - script: |
     python -m venv venv
