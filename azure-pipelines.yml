@@ -9,6 +9,7 @@ trigger:
 pool:
   name: Default  # Se ejecuta en una máquina virtual Ubuntu
 
+<<<<<<< HEAD
 steps:
 - task: UsePythonVersion@0
   inputs:
@@ -33,5 +34,25 @@ steps:
   inputs:
     artifactName: 'drop1'
     publishLocation: 'Container'
+=======
+jobs:
+- job: BuildOnLinux
+  displayName: 'Build on Linux'
+  pool:
+    name: Default
+    demands:
+      - os -equals linux
+  steps:    
+  - script: |
+      python3 -m venv venv1
+      source venv1/bin/activate
+      echo "configurando python3"
+      set PATH=\usr\bin\Python3;%PATH%
+      python3 --version 
+      python3 -m pip install --upgrade pip
+      pip install -r requerimientos.txt
+      
+    displayName: 'Instalacion dependencias y run tests'  
+>>>>>>> b4bcc8a6e10b527ec4ef02d965a1a152f5516f87
 
 
