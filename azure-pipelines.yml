@@ -4,29 +4,38 @@
 # https://aka.ms/yaml
 
 trigger:
-- main  # Se ejecuta al hacer push a la rama main
+- test  # Se ejecuta al hacer push a la rama main
 
 pool:
-  vmImage: 'ubuntu-latest'  # Se ejecuta en una máquina virtual Ubuntu
+  name: Default  # Se ejecuta en una máquina virtual Ubuntu
 
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.x'  # Especifica la versión de Python
+    versionSpec: '3.12'  # Especifica la versión de Python
 
 - script: |
-    python -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt  # Instala las dependencias
-  displayName: 'Set up virtual environment and install dependencies'
+    echo "configurando python 3.12"
+    set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python;%PATH%
+    python --version
+    python -m venv venv2
+    call venv2\Scripts\activate.bat
+    python -m pip install --upgrade pip
+    pip install -r requerimientos.txt # Instala las dependencias
+  displayName: 'configuracion de ambiente e instalacion de dependencias'
 
 - script: |
+    call venv2\Scripts\activate.bat
     pytest  # Ejecuta las pruebas
   displayName: 'Run tests'
 
 - task: PublishBuildArtifacts@1
   inputs:
+<<<<<<< HEAD
     artifactName: 'drop12'
+=======
+    artifactName: 'drop1'
+>>>>>>> dfc0c496aa908f535961d92c3e13e25214744cc6
     publishLocation: 'Container'
 
 
