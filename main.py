@@ -34,7 +34,7 @@ def get_tasks():
 def create_task(task: Task):
     # Generar nuevi ID considerando las tareas anteriores
     new_id = max(task["id"] for task in tasks) + 1 if tasks else 1
-    new_task = {"id": new_id, "title": task.title, "completed": task.completed}
+    new_task = {"id": new_id, "title": task.title, "completed": task.completed}    
     tasks.append(new_task)
     return new_task
 

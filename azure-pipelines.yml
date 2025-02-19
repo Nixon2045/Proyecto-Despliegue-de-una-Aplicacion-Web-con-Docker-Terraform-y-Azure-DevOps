@@ -4,13 +4,11 @@
 # https://aka.ms/yaml
 
 trigger:
-- test  # Se ejecuta al hacer push a la rama main
+- main
 
-pool:
-  name: Default  # Se ejecuta en una máquina virtual Ubuntu
+pool: 
+  name: Default # Asegurarse de usar el nombre del pool que se configuro en azure devops.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 jobs:
 - job: BuildOnLinux
   displayName: 'Build on Linux'
@@ -29,56 +27,21 @@ jobs:
       pip install -r requerimientos.txt
       
     displayName: 'Instalacion dependencias y run tests'  
-=======
-=======
->>>>>>> b232e71fe7ea6b9acc122de0f6303f3c2c869e82
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.12'  # Especifica la versión de Python
 
-- script: |
-    echo "configurando python 3.12"
-    set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python;%PATH%
-    python --version
-    python -m venv venv2
-    call venv2\Scripts\activate.bat
-    python -m pip install --upgrade pip
-    pip install -r requerimientos.txt # Instala las dependencias
-  displayName: 'configuracion de ambiente e instalacion de dependencias'
-
-- script: |
-    call venv2\Scripts\activate.bat
-    pytest  # Ejecuta las pruebas
-  displayName: 'Run tests'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    artifactName: 'drop1'
-    publishLocation: 'Container'
-<<<<<<< HEAD
->>>>>>> 6a4136353d06169e14b9af224d6e40f3f20be767
-=======
-=======
-jobs:
-- job: BuildOnLinux
-  displayName: 'Build on Linux'
+- job: BuildOnWindows
+  displayName: 'Build on Windows'
   pool:
     name: Default
     demands:
-      - os -equals linux
-  steps:    
+      - os -equals windows
+  steps:
   - script: |
-      python3 -m venv venv1
-      source venv1/bin/activate
-      echo "configurando python3"
-      set PATH=\usr\bin\Python3;%PATH%
-      python3 --version 
-      python3 -m pip install --upgrade pip
+      echo "configurando python 3.12"
+      set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python312;%PATH%
+      python --version 
+      python -m pip install --upgrade pip
       pip install -r requerimientos.txt
       
-    displayName: 'Instalacion dependencias y run tests'  
->>>>>>> b4bcc8a6e10b527ec4ef02d965a1a152f5516f87
->>>>>>> b232e71fe7ea6b9acc122de0f6303f3c2c869e82
-
+    displayName: 'Instalacion dependencias y run tests'
+  
 
