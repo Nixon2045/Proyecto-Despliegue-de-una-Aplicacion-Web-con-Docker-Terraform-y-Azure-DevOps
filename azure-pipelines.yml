@@ -31,11 +31,7 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-<<<<<<< HEAD
-    artifactName: 'drop12'
-=======
     artifactName: 'drop1'
->>>>>>> dfc0c496aa908f535961d92c3e13e25214744cc6
     publishLocation: 'Container'
 
 
