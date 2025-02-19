@@ -13,10 +13,10 @@ steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.12'  # Especifica la versión de Python
-
+#desde aqui debo poner el script para correr el agente en linux y luego que corre desde windows too igual que en main 
 - script: |
     echo "configurando python 3.12"
-    set PATH=C:\agent\_work\_tool\Python\3.12.0\x64\Python;%PATH%
+    set PATH=/usr/bin/python3;%PATH%
     python --version
     python -m venv venv2
     call venv2\Scripts\activate.bat
