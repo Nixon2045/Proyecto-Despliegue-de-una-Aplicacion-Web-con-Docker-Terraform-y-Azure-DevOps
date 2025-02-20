@@ -12,32 +12,38 @@ pool:
 #desde aqui debo poner el script para correr el pipeline en linux y luego que corre desde windows too igual que en main 
 
 jobs:
-- job: BuildOnLinux
-  displayName: 'Build on Linux'
-  pool:
-    name: Default
-    demands:
-      - os -equals linux
-  steps:    
-  - script: |
-      echo "configurando python 3.12"
-      set PATH=/usr/bin/python3;%PATH%
-      python3 --version
-      python3 -m venv venv2
-      source venv2\bin\activate
-      python -m pip install --upgrade pip
-      pip install -r requerimientos.txt # Instala las dependencias
-    displayName: 'configuracion de ambiente e instalacion de dependencias'
-
-  - script: | #ejecuta las pruebas
-      source venv2\bin\activate
-      pytest
-    displayName: 'Run tests'
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      artifactName: 'drop1'
-      publishLocation: 'Container' 
+  - job: BuildOnLinux
+    displayName: 'Build on Linux'
+    pool:
+      name: Default
+      demands:
+        - os -equals linux
+    steps:
+      - script: |
+          echo "Configurando Python 3.12"
+          # Asegurarse que Python esté instalado
+          sudo apt-get update
+          sudo apt-get install -y python3-full python3-pip python3-venv
+          
+          # Crear y activar el ambiente virtual
+          python3 -m venv venv1
+          source venv1/bin/activate
+          
+          # Actualizar pip e instalar dependencias
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        displayName: 'Configuración de ambiente e instalación de dependencias'
+      
+      - script: |
+          # Activar el ambiente virtual y ejecutar pruebas
+          source venv/bin/activate
+          pytest
+        displayName: 'Run tests'
+      
+      - task: PublishBuildArtifacts@1
+        inputs:
+          artifactName: 'drop1'
+          publishLocation: 'Container'
 
 - job: BuildOnWindows
   displayName: 'Build on Windows'
