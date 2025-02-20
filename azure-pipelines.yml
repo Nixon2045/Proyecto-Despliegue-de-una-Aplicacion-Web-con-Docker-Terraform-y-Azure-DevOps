@@ -7,31 +7,69 @@ trigger:
 - test  # Se ejecuta al hacer push a la rama main
 
 pool:
-  name: Default  # Se ejecuta en una máquina virtual Ubuntu
+  name: Default  
 
 steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.12'  # Especifica la versión de Python
-#desde aqui debo poner el script para correr el agente en linux y luego que corre desde windows too igual que en main 
-- script: |
-    echo "configurando python 3.12"
-    set PATH=/usr/bin/python3;%PATH%
-    python --version
-    python -m venv venv2
-    call venv2\Scripts\activate.bat
-    python -m pip install --upgrade pip
-    pip install -r requerimientos.txt # Instala las dependencias
-  displayName: 'configuracion de ambiente e instalacion de dependencias'
+    
+#desde aqui debo poner el script para correr el pipeline en linux y luego que corre desde windows too igual que en main 
 
-- script: |
-    call venv2\Scripts\activate.bat
-    pytest  # Ejecuta las pruebas
-  displayName: 'Run tests'
+pool: 
+  name: Default # Asegurarse de usar el nombre del pool que se configuro en azure devops.
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    artifactName: 'drop1'
-    publishLocation: 'Container'
+jobs:
+- job: BuildOnLinux
+  displayName: 'Build on Linux'
+  pool:
+    name: Default
+    demands:
+      - os -equals linux
+  steps:    
+  - script: |
+      echo "configurando python 3.12"
+      set PATH=/usr/bin/python3;%PATH%
+      python --version
+      python -m venv venv2
+      call venv2\Scripts\activate.bat
+      python -m pip install --upgrade pip
+      pip install -r requerimientos.txt # Instala las dependencias
+    displayName: 'configuracion de ambiente e instalacion de dependencias'
 
+  - script: |
+      call venv2\Scripts\activate.bat
+      pytest  # Ejecuta las pruebas
+    displayName: 'Run tests'
 
+  - task: PublishBuildArtifacts@1
+    inputs:
+      artifactName: 'drop1'
+      publishLocation: 'Container' 
+
+- job: BuildOnWindows
+  displayName: 'Build on Windows'
+  pool:
+    name: Default
+    demands:
+      - os -equals windows  
+  steps:    
+  - script: |
+      echo "configurando python 3.12"
+      set PATH=/usr/bin/python3;%PATH%
+      python --version
+      python -m venv venv2
+      call venv2\Scripts\activate.bat
+      python -m pip install --upgrade pip
+      pip install -r requerimientos.txt # Instala las dependencias
+    displayName: 'configuracion de ambiente e instalacion de dependencias'
+
+  - script: |
+      call venv2\Scripts\activate.bat
+      pytest  # Ejecuta las pruebas
+    displayName: 'Run tests'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      artifactName: 'drop1'
+      publishLocation: 'Container'
