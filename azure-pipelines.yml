@@ -36,7 +36,7 @@ jobs:
       
       - script: |
           # Activar el ambiente virtual y ejecutar pruebas
-          source venv/bin/activate
+          source venv1/bin/activate
           pytest
         displayName: 'Run tests'
       
