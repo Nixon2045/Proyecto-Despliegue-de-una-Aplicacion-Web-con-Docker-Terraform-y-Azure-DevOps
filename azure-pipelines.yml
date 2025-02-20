@@ -7,17 +7,15 @@ trigger:
 - test  # Se ejecuta al hacer push a la rama main
 
 pool:
-  name: Default  
+  name: Default  # Asegurarse de usar el nombre del pool que se configuro en azure devops.
+
 
 steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.12'  # Especifica la versión de Python
-    
-#desde aqui debo poner el script para correr el pipeline en linux y luego que corre desde windows too igual que en main 
 
-pool: 
-  name: Default # Asegurarse de usar el nombre del pool que se configuro en azure devops.
+#desde aqui debo poner el script para correr el pipeline en linux y luego que corre desde windows too igual que en main 
 
 jobs:
 - job: BuildOnLinux
