@@ -22,7 +22,7 @@ jobs:
   - script: |
       echo "configurando python 3.12"
       set PATH=/usr/bin/python3;%PATH%
-      python --version
+      python3 --version
       python3 -m venv venv2
       source venv2\bin\activate
       python -m pip install --upgrade pip
