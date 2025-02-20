@@ -31,6 +31,7 @@ jobs:
           
           # Actualizar pip e instalar dependencias
           python -m pip install --upgrade pip
+          pip install pytest
           pip install -r requerimientos.txt
         displayName: 'Configuración de ambiente e instalación de dependencias'
       
@@ -45,28 +46,28 @@ jobs:
           artifactName: 'drop1'
           publishLocation: 'Container'
 
+
   - job: BuildOnWindows
     displayName: 'Build on Windows'
     pool:
       name: Default
       demands:
-        - os -equals windows  
-    steps:    
+        - os -equals windows
+    steps:
       - script: |
-          echo "configurando python 3.12"
-          set PATH=/usr/bin/python3;%PATH%
-          python --version
+          echo "Configurando Python 3.12"
           python -m venv venv2
           call venv2\Scripts\activate.bat
           python -m pip install --upgrade pip
-          pip install -r requerimientos.txt # Instala las dependencias
-        displayName: 'configuracion de ambiente e instalacion de dependencias'
-
+          pip install pytest
+          pip install -r requerimientos.txt
+        displayName: 'Configuración de ambiente e instalación de dependencias'
+      
       - script: |
           call venv2\Scripts\activate.bat
-          pytest  # Ejecuta las pruebas
+          pytest
         displayName: 'Run tests'
-
+      
       - task: PublishBuildArtifacts@1
         inputs:
           artifactName: 'drop1'
