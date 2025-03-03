@@ -1,3 +1,6 @@
+#aun pendiente de cambio de variables
+
+
 trigger:
 - test  # Se ejecuta al hacer push en main
 
