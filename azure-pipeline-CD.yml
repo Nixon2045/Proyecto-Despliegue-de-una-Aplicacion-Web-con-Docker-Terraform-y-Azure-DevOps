@@ -1,56 +1,51 @@
-#aun pendiente de cambio de variables
-
 
 trigger:
-- test  # Se ejecuta al hacer push en main
+- test
 
 pool:
-  name: Default  # Asegúrate de que sea el nombre del pool correcto
+  vmImage: Default
 
 variables:
-  azureSubscription: 'NombreDeTuConexionAzure'  # Nombre de la conexión de servicio en Azure DevOps
-  acrName: 'TuACR.azurecr.io'  # Nombre de tu Azure Container Registry
-  imageName: 'mi-api'  # Nombre de la imagen Docker
-  appServiceName: 'mi-app-service'  # Nombre de tu App Service en Azure
+  RESOURCE_GROUP: 'todo-api-rg'
+  APP_NAME: 'todo-api-app'
+  ACR_NAME: 'acr1api'
+  IMAGE_NAME: 'todo-api'
+  TAG: 'latest'
+  REGION: 'westeurope'
+  SUBSCRIPTION_ID: '78ce0709-8050-4077-96ce-0ca5dd9bda30'
 
 stages:
-- stage: Build
-  displayName: 'Construir y publicar imagen Docker'
-  jobs:
-  - job: BuildAndPushDockerImage
-    displayName: 'Construcción y publicación de imagen Docker'
-    steps:
-      - task: Docker@2
-        displayName: 'Autenticación en ACR'
-        inputs:
-          command: 'login'
-          containerRegistry: '$(azureSubscription)'
-
-      - task: Docker@2
-        displayName: 'Construir la imagen Docker'
-        inputs:
-          command: 'build'
-          dockerfile: 'Dockerfile'
-          repository: '$(acrName)/$(imageName)'
-          tags: 'latest'
-
-      - task: Docker@2
-        displayName: 'Subir imagen a ACR'
-        inputs:
-          command: 'push'
-          repository: '$(acrName)/$(imageName)'
-          tags: 'latest'
-
 - stage: Deploy
-  displayName: 'Desplegar en Azure App Service'
-  dependsOn: Build
+  displayName: 'Deploy to Azure'
   jobs:
   - job: DeployToAzure
-    displayName: 'Desplegar en Azure'
+    displayName: 'Deploy to Azure App Service'
     steps:
-      - task: AzureWebAppContainer@1
-        displayName: 'Desplegar contenedor en App Service'
+      - task: AzureCLI@2
+        displayName: 'Login to Azure'
         inputs:
-          azureSubscription: '$(azureSubscription)'
-          appName: '$(appServiceName)'
-          containers: '$(acrName)/$(imageName):latest'
+          azureSubscription: '7536fcae-0208-48c2-b9b0-31b1f2818807'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az account set --subscription $(78ce0709-8050-4077-96ce-0ca5dd9bda30)
+
+      - task: AzureCLI@2
+        displayName: 'Deploy new container image to App Service'
+        inputs:
+          azureSubscription: '7536fcae-0208-48c2-b9b0-31b1f2818807'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az webapp config container set --resource-group $(RESOURCE_GROUP) --name $(APP_NAME) \
+              --docker-custom-image-name $(ACR_NAME).azurecr.io/$(IMAGE_NAME):$(TAG) \
+              --docker-registry-server-url https://$(ACR_NAME).azurecr.io
+
+      - task: AzureCLI@2
+        displayName: 'Restart App Service to apply changes'
+        inputs:
+          azureSubscription: '7536fcae-0208-48c2-b9b0-31b1f2818807'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az webapp restart --resource-group $(RESOURCE_GROUP) --name $(APP_NAME)
