@@ -3,7 +3,7 @@ trigger:
 - test
 
 pool:
-  vmImage: Default
+  name: Default
 
 variables:
   RESOURCE_GROUP: 'todo-api-rg'
