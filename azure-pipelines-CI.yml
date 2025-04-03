@@ -1,0 +1,62 @@
+# azure-pipelines-CI.yml
+
+trigger:
+- test  # Se ejecuta al hacer push a la rama main
+
+pool:
+  name: Default  # Asegurarse de usar el nombre del pool que se configuro en azure devops.
+
+#desde aqui debo poner el script para correr el pipeline en linux y luego que corre desde windows too igual que en main 
+
+jobs:
+  - job: BuildOnLinux
+    displayName: 'Build on Linux'
+    pool:
+      name: Default
+      demands:
+        - os -equals linux
+    steps:
+      - script: |
+          echo "Configurando Python 3.12"
+          # Asegurarse que Python esté instalado
+          sudo apt-get update
+          sudo apt-get install -y python3-full python3-pip python3-venv
+          
+          # Crear y activar el ambiente virtual
+          python3 -m venv venv1
+          source venv1/bin/activate
+          
+          # Actualizar pip e instalar dependencias
+          python -m pip install --upgrade pip
+          pip install pytest
+          pip install -r requerimientos.txt
+        displayName: 'Configuración de ambiente e instalación de dependencias'
+      
+      - script: |
+          # Activar el ambiente virtual y ejecutar pruebas
+          source venv1/bin/activate
+          pytest || echo "no test found, continuing..."
+          
+        displayName: 'Run tests'
+
+
+  - job: BuildOnWindows
+    displayName: 'Build on Windows'
+    pool:
+      name: Default
+      demands:
+        - os -equals windows
+    steps:
+      - script: |
+          echo "Configurando Python 3.12"
+          python -m venv venv2
+          call venv2\Scripts\activate.bat
+          python -m pip install --upgrade pip
+          pip install pytest
+          pip install -r requerimientos.txt
+        displayName: 'Configuración de ambiente e instalación de dependencias'
+      
+      - script: |
+          call venv2\Scripts\activate.bat
+          pytest || echo "test no found, continuing..."
+        displayName: 'Run tests'

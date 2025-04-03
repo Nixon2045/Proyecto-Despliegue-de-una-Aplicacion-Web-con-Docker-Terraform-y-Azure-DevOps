@@ -1,0 +1,51 @@
+
+trigger:
+- test
+
+pool:
+  name: Default
+
+variables:
+  RESOURCE_GROUP: 'todo-api-rg'
+  APP_NAME: 'todo-api-app'
+  ACR_NAME: 'acr1api'
+  IMAGE_NAME: 'todo-api'
+  TAG: 'latest'
+  REGION: 'westeurope'
+  SUBSCRIPTION_ID: '78ce0709-8050-4077-96ce-0ca5dd9bda30'
+
+stages:
+- stage: Deploy
+  displayName: 'Deploy to Azure'
+  jobs:
+  - job: DeployToAzure
+    displayName: 'Deploy to Azure App Service'
+    steps:
+      - task: AzureCLI@2
+        displayName: 'Login to Azure'
+        inputs:
+          azureSubscription: '7536fcae-0208-48c2-b9b0-31b1f2818807'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az account set --subscription $(78ce0709-8050-4077-96ce-0ca5dd9bda30)
+
+      - task: AzureCLI@2
+        displayName: 'Deploy new container image to App Service'
+        inputs:
+          azureSubscription: '7536fcae-0208-48c2-b9b0-31b1f2818807'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az webapp config container set --resource-group $(RESOURCE_GROUP) --name $(APP_NAME) \
+              --docker-custom-image-name $(ACR_NAME).azurecr.io/$(IMAGE_NAME):$(TAG) \
+              --docker-registry-server-url https://$(ACR_NAME).azurecr.io
+
+      - task: AzureCLI@2
+        displayName: 'Restart App Service to apply changes'
+        inputs:
+          azureSubscription: '7536fcae-0208-48c2-b9b0-31b1f2818807'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az webapp restart --resource-group $(RESOURCE_GROUP) --name $(APP_NAME)
